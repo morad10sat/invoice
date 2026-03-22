@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+      <!DOCTYPE html>
 <html lang="fr" dir="ltr">
 <head>
     <meta charset="UTF-8">
@@ -8,52 +8,41 @@
         body { font-family: 'Arial', sans-serif; background: #f0f2f5; padding: 10px; margin: 0; }
         .container { max-width: 480px; margin: auto; }
         .card { background: white; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 20px; border-top: 10px solid #49006a; margin-bottom: 20px; }
-        
-        /* تصميم الرأسية الجديدة */
         .header-section { text-align: center; margin-bottom: 15px; }
         .moradsat-title { color: #49006a; margin: 0; font-size: 26px; font-weight: bold; }
         .moradsat-phone { color: #444; font-size: 20px; font-weight: bold; margin-bottom: 10px; display: block; }
-
-        /* ستايل لوغو beIN المحدث (بنفسجي وأبيض) */
         .bein-logo-new { text-align: center; margin: 10px auto; display: flex; align-items: center; justify-content: center; }
         .bein-purple { color: #49006a; font-weight: bold; font-style: italic; font-size: 20px; padding: 2px 5px; }
         .sports-box { background: #49006a; color: white; padding: 2px 10px; border-radius: 5px; font-weight: bold; font-size: 20px; margin-left: 5px; text-transform: uppercase; }
-
         label { display: block; margin: 10px 0 5px 0; font-weight: bold; color: #49006a; font-size: 14px; }
         input, select { width: 100%; padding: 14px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; font-size: 16px; }
-        .btn-save { background: #49006a; color: white; border: none; padding: 16px; width: 100%; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        
+        .btn-save { background: #25D366; color: white; border: none; padding: 16px; width: 100%; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; }
         #invoice-result { display: none; background: white; border: 3px solid #49006a; border-radius: 15px; padding: 20px; margin-top: 10px; }
         .inv-header { text-align: center; border-bottom: 2px solid #eee; margin-bottom: 15px; padding-bottom: 10px; }
         .inv-body { line-height: 1.8; font-size: 18px; color: #333; }
         .highlight { font-weight: bold; color: #49006a; }
-        
         .dates-container { background: #fff5f5; border: 2px solid #ff4d4d; border-radius: 10px; padding: 10px; margin: 15px 0; text-align: center; }
         .date-row { display: flex; justify-content: space-between; padding: 5px 10px; font-size: 17px; border-bottom: 1px solid #ffebeb; }
         .date-row:last-child { border-bottom: none; }
         .date-val { font-weight: bold; color: #d32f2f; font-size: 18px; }
-        
         .cash-plus-box { background: #fffde7; border: 2px dashed #fbc02d; padding: 15px; margin-top: 15px; text-align: center; border-radius: 12px; }
         .tpe-number { font-size: 24px; color: #d32f2f; font-weight: bold; display: block; }
         .footer-info { text-align: center; margin-top: 20px; font-size: 14px; color: #444; border-top: 1px solid #eee; padding-top: 10px; }
         .search-box { background: #e3f2fd; border-radius: 15px; padding: 15px; border: 1px solid #007bff; margin-top: 25px; }
+        .btn-check { width: 100%; background: #007bff; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
-
     <div class="container">
         <div class="card">
             <div class="header-section">
                 <div class="moradsat-title">MORADSAT</div>
                 <div class="moradsat-phone">06.38.48.58.12</div>
-                
-                <div class="bein-logo-new">
-                    <span class="bein-purple">beIN</span><span class="sports-box">SPORTS</span>
-                </div>
+                <div class="bein-logo-new"><span class="bein-purple">beIN</span><span class="sports-box">SPORTS</span></div>
             </div>
             
             <input type="text" id="cName" placeholder="Nom du Client">
-            <input type="number" id="cPhone" placeholder="Téléphone du Client">
+            <input type="number" id="cPhone" placeholder="Téléphone">
             <input type="text" id="cCard" placeholder="Numéro Smart Card">
 
             <label>Type & Durée:</label>
@@ -61,35 +50,27 @@
                 <optgroup label="beIN SPORTS">
                     <option value="1" data-price="190">beIN - 1 Mois (190 DH)</option>
                     <option value="3" data-price="470">beIN - 3 Mois (470 DH)</option>
-                    <option value="6" data-price="900">beIN - 6 Mois (900 DH)</option>
+                    <option value="6" data-price="950">beIN - 6 Mois (950 DH)</option>
                     <option value="12" data-price="1800">beIN - 12 Mois (1800 DH)</option>
                 </optgroup>
-                <optgroup label="IPTV Premium (12 Mois)">
-                    <option value="12" data-price="200">IPTV - العام (200 DH)</option>
-                    <option value="12" data-price="150">IPTV - العام (150 DH)</option>
-                    <option value="12" data-price="100">IPTV - العام (100 DH)</option>
-                    <option value="12" data-price="50">IPTV - العام (50 DH)</option>
+                <optgroup label="IPTV Premium">
+                    <option value="12" data-price="200">IPTV Premium - العام (200 DH)</option>
                 </optgroup>
             </select>
 
-            <button class="btn-save" onclick="generateTicket()">GÉNÉRER LE REÇU 📄</button>
+            <button class="btn-save" onclick="generateAndSend()">✅ CONFIRMER & ENVOYER</button>
         </div>
 
         <div id="invoice-result">
             <div class="inv-header">
                 <div class="moradsat-title" style="font-size: 28px;">MORADSAT</div>
-                
-                <div class="bein-logo-new" style="margin: 5px auto;">
-                    <span class="bein-purple" style="font-size: 16px;">beIN</span><span class="sports-box" style="font-size: 16px;">SPORTS</span>
-                </div>
-                <small id="resSub">Service Premium</small>
+                <div class="bein-logo-new" style="margin: 5px auto;"><span class="bein-purple" style="font-size: 16px;">beIN</span><span class="sports-box" style="font-size: 16px;">SPORTS</span></div>
+                <small>Agent Autorisé beIN SPORTS</small>
             </div>
-            
             <div class="inv-body">
                 <div>Client: <span class="highlight" id="resName"></span></div>
                 <div>Tél: <span class="highlight" id="resPhone"></span></div>
                 <div>Smart Card: <span class="highlight" id="resIdValue"></span></div>
-                
                 <div class="dates-container">
                     <div class="date-row"><span>Date Début:</span><span class="date-val" id="resStart"></span></div>
                     <div class="date-row"><span>Date d'échéance:</span><span class="date-val" id="resEnd"></span></div>
@@ -97,32 +78,27 @@
                         <span>Montant Payé:</span><span class="date-val" style="font-size: 22px;" id="resPrice"></span>
                     </div>
                 </div>
-                
-                <div class="cash-plus-box">
-                    <strong>Paiement CASH PLUS</strong>
-                    <span class="tpe-number">TPE: 35553R2778</span>
-                </div>
+                <div class="cash-plus-box"><strong>Paiement CASH PLUS</strong><span class="tpe-number">TPE: 35553R2778</span></div>
             </div>
             <div class="footer-info">📍 Fès - Ben Souda | 📞 0638485812</div>
         </div>
 
         <div class="search-box">
-            <h3 style="margin:0 0 10px 0; color:#007bff;">🔍 Check Expiration</h3>
+            <h3 style="margin:0 0 10px 0; color:#007bff; text-align:center;">🔍 Vérifier Expiration</h3>
             <input type="text" id="sCard" placeholder="Entrer n° de carte">
-            <button onclick="checkInfo()" style="width:100%; background:#007bff; color:white; border:none; padding:12px; border-radius:10px; font-weight:bold; cursor:pointer;">Vérifier</button>
+            <button class="btn-check" onclick="checkInfo()">Vérifier</button>
             <div id="searchRes" style="margin-top:12px; display:none; background:white; padding:10px; border-radius:8px; border:1px solid #ddd;"></div>
         </div>
     </div>
 
     <script>
-        function generateTicket() {
+        function generateAndSend() {
             const n = document.getElementById('cName').value;
             const p = document.getElementById('cPhone').value;
             const c = document.getElementById('cCard').value;
             const select = document.getElementById('cDur');
             const m = select.value;
             const price = select.options[select.selectedIndex].getAttribute('data-price');
-            const labelText = select.options[select.selectedIndex].text;
 
             if(!n || !c) { alert("Nom et Smart Card obligatoires !"); return; }
 
@@ -140,10 +116,14 @@
             document.getElementById('resStart').innerText = startStr;
             document.getElementById('resEnd').innerText = endStr;
             document.getElementById('resPrice').innerText = price + " DH";
-
-            document.getElementById('resSub').innerText = labelText.includes("beIN") ? "Agent Autorisé beIN SPORTS" : "Service IPTV Premium";
             document.getElementById('invoice-result').style.display = 'block';
-            window.scrollTo(0, document.body.scrollHeight);
+
+            const myWhatsapp = "212638485812";
+            const message = `*MORADSAT - طلب تفعيل*%0A*العميل:* ${n}%0A*رقم الكارت:* ${c}%0A*الثمن:* ${price} DH%0A*تاريخ الانتهاء:* ${endStr}`;
+            
+            setTimeout(() => {
+                window.open(`https://wa.me/${myWhatsapp}?text=${message}`, '_blank');
+            }, 1000);
         }
 
         function checkInfo() {
@@ -152,10 +132,11 @@
             var res = document.getElementById('searchRes');
             if(data) {
                 var info = JSON.parse(data);
-                res.innerHTML = `✅ <b>Client:</b> ${info.name}<br>📞 <b>Tél:</b> ${info.phone}<br>📅 <b>Exp:</b> <span style="color:red; font-weight:bold;">${info.exp}</span>`;
+                res.innerHTML = `✅ <b>Client:</b> ${info.name}<br>📅 <b>Exp:</b> <span style="color:red; font-weight:bold;">${info.exp}</span>`;
                 res.style.display = 'block';
             } else { alert("Carte non trouvée !"); }
         }
     </script>
 </body>
 </html>
+                          
