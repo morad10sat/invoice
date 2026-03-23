@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr" dir="ltr">
 <head>
     <meta charset="UTF-8">
@@ -81,14 +81,18 @@
         <center style="margin-top: 10px; font-size: 12px; color: #666;">📍 Fès - Ben Souda</center>
     </div>
 </div>
+
 <script>
-    let invoiceDatabase = {};
+    // تعديل ذكي: جلب البيانات من ذاكرة المتصفح (localStorage)
+    let invoiceDatabase = JSON.parse(localStorage.getItem('moradsat_db')) || {};
+
     function calculateExpiry(months) {
         const start = new Date();
         const end = new Date();
         end.setMonth(start.getMonth() + parseInt(months));
         return { startStr: start.toLocaleDateString('fr-FR'), endStr: end.toLocaleDateString('fr-FR') };
     }
+
     function generateInvoice() {
         const n = document.getElementById('custName').value;
         const ph = document.getElementById('custPhone').value;
@@ -96,9 +100,15 @@
         const select = document.getElementById('duration');
         const p = select.value;
         const months = select.options[select.selectedIndex].getAttribute('data-months');
+        
         if(!n || !c || !ph) { alert("Veuillez remplir les informations !"); return; }
+        
         const dt = calculateExpiry(months);
+        
+        // حفظ في الذاكرة المحلية
         invoiceDatabase[c] = { start: dt.startStr, end: dt.endStr };
+        localStorage.setItem('moradsat_db', JSON.stringify(invoiceDatabase));
+
         document.getElementById('resName').innerText = n;
         document.getElementById('resPhone').innerText = ph;
         document.getElementById('resCard').innerText = c;
@@ -106,16 +116,21 @@
         document.getElementById('resEnd').innerText = dt.endStr;
         document.getElementById('resPrice').innerText = p + " DH";
         document.getElementById('invoice-result').style.display = 'block';
+        
         const msg = `*MORADSAT*%0A*Client:* ${n}%0A*Tél:* ${ph}%0A*Card:* ${c}%0A*Début:* ${dt.startStr}%0A*Fin:* ${dt.endStr}%0A*Prix:* ${p}DH`;
         window.open(`https://wa.me/212638485812?text=${msg}`, '_blank');
     }
+
     function runCheck() {
         const inputVal = document.getElementById('checkInput').value;
+        
+        // البحث في الذاكرة المحفوظة
         if(!invoiceDatabase[inputVal]) {
             alert("Aucune facture trouvée pour ce numéro !");
             document.getElementById('check-display').style.display = 'none';
             return;
         }
+        
         document.getElementById('chkStart').innerText = invoiceDatabase[inputVal].start;
         document.getElementById('chkEnd').innerText = invoiceDatabase[inputVal].end;
         document.getElementById('check-display').style.display = 'block';
@@ -123,4 +138,4 @@
 </script>
 </body>
 </html>
-          
+     
