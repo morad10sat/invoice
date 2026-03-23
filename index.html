@@ -9,35 +9,13 @@
         .container { max-width: 450px; margin: auto; }
         .card { background: white; border-radius: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 25px; border-top: 8px solid #49006a; text-align: center; }
         .moradsat-title { color: #49006a; font-size: 32px; font-weight: bold; margin: 0; }
-        .site-url-small { color: #49006a; font-size: 18px; font-weight: bold; margin: 5px 0; display: block; }
-        
-        .my-phone-header { 
-            color: #000; 
-            font-size: 22px; 
-            font-weight: bold; 
-            margin-bottom: 5px; 
-            display: block;
-        }
-        
-        /* تكبير شعار beIN SPORTS */
-        .bein-logo { 
-            margin: 15px 0; 
-            font-style: italic; 
-            font-size: 28px; /* كبرت الحجم هنا */
-            color: #49006a; 
-            font-weight: bold;
-        }
-        .bein-box { 
-            background: #49006a; 
-            color: white; 
-            padding: 4px 12px; 
-            border-radius: 8px; 
-            font-weight: bold; 
-            margin-left: 5px; 
-        }
+        .site-url { color: #49006a; font-size: 18px; font-weight: bold; margin: 5px 0; display: block; }
+        .my-phone-header { color: #000; font-size: 22px; font-weight: bold; margin-bottom: 5px; display: block; }
+        .bein-logo { margin: 15px 0; font-style: italic; font-size: 28px; color: #49006a; font-weight: bold; }
+        .bein-box { background: #49006a; color: white; padding: 4px 12px; border-radius: 8px; font-weight: bold; margin-left: 5px; }
         
         input, select { width: 100%; padding: 15px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 12px; font-size: 16px; box-sizing: border-box; }
-        .btn-confirm { background: #2ecc71; color: white; border: none; padding: 18px; width: 100%; border-radius: 15px; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-confirm { background: #2ecc71; color: white; border: none; padding: 18px; width: 100%; border-radius: 15px; font-size: 18px; font-weight: bold; cursor: pointer; }
         
         .check-section { background: #eef7ff; border: 2px solid #3498db; border-radius: 18px; padding: 15px; margin: 20px 0; }
         .btn-check { background: #007bff; color: white; border: none; padding: 12px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; }
@@ -45,7 +23,6 @@
 
         #invoice-result { display: none; background: white; border-radius: 20px; padding: 25px; margin-top: 20px; border: 2px solid #49006a; }
         .invoice-phone-big { font-size: 26px; font-weight: bold; color: #333; margin: 10px 0; display: block; }
-
         .dates-box { border: 2px solid #ff4d4d; border-radius: 12px; padding: 15px; margin: 15px 0; background: #fff8f8; text-align: left; }
         .date-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 16px; color: #333; }
         .price-total { text-align: center; font-size: 30px; font-weight: bold; color: #d32f2f; margin-top: 10px; border-top: 1px solid #fee; padding-top: 10px; }
@@ -60,7 +37,7 @@
 <div class="container">
     <div class="card">
         <div class="moradsat-title">MORADSAT</div>
-        <div class="site-url-small">moradsat.hopto.org</div>
+        <div class="site-url">moradsat.hopto.org</div>
         <div class="my-phone-header">06.38.48.58.12</div>
         <div class="bein-logo">beIN <span class="bein-box">SPORTS</span></div>
 
@@ -69,7 +46,7 @@
         <input type="text" id="custCard" placeholder="Numéro Smart Card">
 
         <select id="duration">
-            <option value="190" data-months="1">beIN - 1 Mois (200 DH)</option>
+            <option value="190" data-months="1">beIN - 1 Mois (190 DH)</option>
             <option value="470" data-months="3">beIN - 3 Mois (470 DH)</option>
             <option value="950" data-months="6">beIN - 6 Mois (950 DH)</option>
             <option value="1800" data-months="12">beIN - 12 Mois (1800 DH)</option>
@@ -93,7 +70,7 @@
     <div id="invoice-result">
         <center>
             <div class="moradsat-title">MORADSAT</div>
-            <div class="site-url-small">moradsat.hopto.org</div>
+            <div class="site-url">moradsat.hopto.org</div>
             <div class="invoice-phone-big">06.38.48.58.12</div>
         </center>
         <div style="margin-top: 20px; font-size: 18px;">
@@ -102,15 +79,13 @@
             <b>Smart Card:</b> <span id="resCard"></span>
             
             <div class="dates-box">
-                <div class="date-row"><span>Date Début:</span> <span id="resStart"></span></div>
+                <div class="date-row"><span>Date Déبد:</span> <span id="resStart"></span></div>
                 <div class="date-row"><span>Date d'échéance:</span> <span id="resEnd"></span></div>
                 <div class="price-total" id="resPrice"></div>
             </div>
         </div>
-
         <div class="cash-plus-footer">
             <div class="cp-text">CASH <span>PLUS</span></div>
-            <div style="font-size: 12px; font-weight: bold; color: #fbc02d;">PAIEMENT SÉCURISÉ</div>
             <div style="font-size: 26px; font-weight: bold; margin-top: 5px;">TPE: 35553R2778</div>
         </div>
         <center style="margin-top: 10px; font-size: 12px; color: #666;">📍 Fès - Ben Souda</center>
@@ -118,6 +93,9 @@
 </div>
 
 <script>
+    // متغير كيحفظ البيانات للتشيك
+    let invoiceDatabase = {};
+
     function calculateExpiry(months) {
         const start = new Date();
         const end = new Date();
@@ -128,17 +106,6 @@
         };
     }
 
-    function runCheck() {
-        const inputVal = document.getElementById('checkInput').value;
-        if(!inputVal) { alert("Entrez le numéro !"); return; }
-        const select = document.getElementById('duration');
-        const months = select.options[select.selectedIndex].getAttribute('data-months');
-        const dt = calculateExpiry(months);
-        document.getElementById('chkStart').innerText = dt.startStr;
-        document.getElementById('chkEnd').innerText = dt.endStr;
-        document.getElementById('check-display').style.display = 'block';
-    }
-
     function generateInvoice() {
         const n = document.getElementById('custName').value;
         const ph = document.getElementById('custPhone').value;
@@ -147,11 +114,14 @@
         const p = select.value;
         const months = select.options[select.selectedIndex].getAttribute('data-months');
 
-        if(!n || !c || !ph) { alert("Champs obligatoires !"); return; }
+        if(!n || !c || !ph) { alert("Veuillez remplir les informations !"); return; }
 
         const dt = calculateExpiry(months);
         
-        // إظهار الفاتورة في الصفحة
+        // تسجيل الفاتورة في "الداتابيز" الصغيرة باش يقراها التشيك
+        invoiceDatabase[c] = { start: dt.startStr, end: dt.endStr };
+
+        // إظهار الفاتورة تحت
         document.getElementById('resName').innerText = n;
         document.getElementById('resPhone').innerText = ph;
         document.getElementById('resCard').innerText = c;
@@ -160,10 +130,27 @@
         document.getElementById('resPrice').innerText = p + " DH";
         document.getElementById('invoice-result').style.display = 'block';
 
-        // إرسال للواتساب (نفس الكود اللي كان خدام قبل)
+        // الإرسال للواتساب
         const msg = `*MORADSAT*%0A*Client:* ${n}%0A*Tél:* ${ph}%0A*Card:* ${c}%0A*Début:* ${dt.startStr}%0A*Fin:* ${dt.endStr}%0A*Prix:* ${p}DH`;
         window.open(`https://wa.me/212638485812?text=${msg}`, '_blank');
+    }
+
+    function runCheck() {
+        const inputVal = document.getElementById('checkInput').value;
+        
+        // التحقق واش الفاتورة مسجلة لهاد الرقم
+        if(!invoiceDatabase[inputVal]) {
+            alert("Aucune facture trouvée pour ce numéro !");
+            document.getElementById('check-display').style.display = 'none';
+            return;
+        }
+
+        // قراءة التواريخ المسجلة
+        document.getElementById('chkStart').innerText = invoiceDatabase[inputVal].start;
+        document.getElementById('chkEnd').innerText = invoiceDatabase[inputVal].end;
+        document.getElementById('check-display').style.display = 'block';
     }
 </script>
 </body>
 </html>
+
