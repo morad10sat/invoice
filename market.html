@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MORADSAT - AZASAT Z1</title>
+    <title>MORADSAT - COMMANDES</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #1a5f7a; --secondary: #27ae60; --accent: #e74c3c; --bg: #f4f7f6; }
@@ -11,10 +11,11 @@
         .container { max-width: 600px; margin: auto; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; }
         .header { background: var(--primary); color: white; padding: 20px; text-align: center; }
         .header h1 { margin: 0; font-size: 24px; text-transform: uppercase; }
+        .contact-top { font-size: 13px; opacity: 0.9; margin-top: 5px; }
         .content { padding: 20px; }
         .product-preview { text-align: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
-        .product-preview img { width: 100%; border-radius: 12px; max-height: 250px; object-fit: contain; background: #fff; }
-        .tech-specs { background: #eef7f9; padding: 12px; border-radius: 8px; margin: 10px 0; font-size: 14px; color: #1a5f7a; font-weight: 600; text-align: left; }
+        .product-preview img { width: 100%; border-radius: 12px; max-height: 220px; object-fit: cover; }
+        .tech-specs { background: #eef7f9; padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 14px; color: #1a5f7a; font-weight: 600; display: inline-block; width: 90%; }
         .input-group { margin-bottom: 15px; text-align: left; }
         label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; color: #555; }
         input, textarea, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
@@ -22,57 +23,96 @@
         #invoice-section { display: none; padding: 30px; background: white; border: 3px solid var(--primary); margin: 10px; border-radius: 15px; }
         .inv-header-title { text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; }
         .inv-header-title h2 { color: var(--primary); margin: 0; font-size: 28px; }
-        .inv-row { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 5px; }
+        .inv-row { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 5px; font-size: 15px; }
         .payment-box { background: #fffdf5; border: 1px solid #ffeeba; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 14px; }
         .btn-wa { background: #25D366; color: white; text-decoration: none; text-align: center; padding: 18px; border-radius: 12px; font-weight: bold; display: block; margin-top: 10px; font-size: 18px; }
+        .btn-print { background: #333; color: white; border: none; padding: 10px; width: 100%; border-radius: 8px; margin-top: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
+
 <div id="main-app" class="container">
     <div id="order-page">
-        <div class="header"><h1>MORADSAT MARKET</h1></div>
+        <div class="header">
+            <h1>MORADSAT MARKET</h1>
+            <div class="contact-top">📍 Fès, Maroc | 📞 +212 638-485812</div>
+        </div>
         <div class="content">
             <div class="product-preview">
-                <img src="https://i.ibb.co/mFmP6Bv/azasat.jpg" alt="Azasat Z1 8K">
-                <h3>الجهاز الجديد: Azasat Z1 - 8K HDR</h3>
-                <div class="tech-specs">
-                    ✅ أحدث نظام أندرويد 15 سريع وسلس<br>
-                    ✅ 4GB RAM + 16GB STORAGE<br>
-                    ✅ ضمان كامل لمدة سنة (12 شهر)<br>
-                    ✅ اشتراك سنة كاملة بجميع القنوات
-                </div>
-                <div style="color: var(--accent); font-weight: bold; font-size: 26px; margin-top: 10px;">300 DH فقط</div>
+                <img src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=800&q=80" alt="TV BOX">
+                <h3 style="margin: 10px 0;">TV BOX ANDROID 15 (4K)</h3>
+                <div class="tech-specs">🚀 4GB RAM + 16GB STORAGE</div>
+                <div style="color: var(--accent); font-weight: bold; font-size: 24px; margin-top: 10px;">300 DH / UNITÉ</div>
+                <p style="font-size: 13px; color: #2980b9; font-weight: bold;">🚚 Livraison Gratuite</p>
             </div>
-            <div class="input-group"><label>Quantité :</label><select id="prodQty"><option value="1">1 Unité - 300 DH</option><option value="2">2 Unités - 600 DH</option></select></div>
-            <div class="input-group"><label>Nom Complet :</label><input type="text" id="custName" placeholder="الاسم الكامل"></div>
-            <div class="input-group"><label>Téléphone :</label><input type="tel" id="custPhone" placeholder="رقم الواتساب"></div>
-            <div class="input-group"><label>Adresse :</label><textarea id="custAddress" rows="2" placeholder="العنوان بالكامل"></textarea></div>
-            <button class="btn-order" onclick="generateInvoice()">✅ إرسال الطلب</button>
+            <div class="input-group">
+                <label>Quantité :</label>
+                <select id="prodQty">
+                    <option value="1">1 Unité - 300 DH</option>
+                    <option value="2">2 Unités - 600 DH</option>
+                    <option value="3">3 Unités - 900 DH</option>
+                    <option value="4">4 Unités - 1200 DH</option>
+                    <option value="5">5 Unités - 1500 DH</option>
+                </select>
+            </div>
+            <div class="input-group"><label>Nom Complet :</label><input type="text" id="custName"></div>
+            <div class="input-group"><label>Téléphone WhatsApp :</label><input type="tel" id="custPhone"></div>
+            <div class="input-group"><label>Adresse de Livraison :</label><textarea id="custAddress" rows="2"></textarea></div>
+            <button class="btn-order" onclick="generateInvoice()">✅ CONFIRMER LA COMMANDE</button>
         </div>
     </div>
+
     <div id="invoice-section">
-        <div class="inv-header-title"><h2>MORADSAT</h2><p>REÇU DE COMMANDE</p></div>
+        <div class="inv-header-title"><h2>MORADSAT</h2><p style="margin:0; font-weight:600;">BON DE COMMANDE</p></div>
+        <div class="inv-row"><span>N°:</span><strong id="inv-no"></strong></div>
+        <div class="inv-row"><span>Date:</span><strong id="inv-date"></strong></div>
+        <hr>
         <div class="inv-row"><span>Client:</span><strong id="inv-client"></strong></div>
-        <div class="inv-row"><span>Article:</span><strong>Azasat Z1 8K</strong></div>
-        <div class="inv-row" style="font-size: 20px; color: var(--accent);"><span>TOTAL:</span><strong id="inv-total"></strong></div>
-        <div class="payment-box"><strong>💰 PAIEMENT CASH PLUS :</strong><br>Nom: <strong>MORAD ZERROUAL</strong><br>Ville: <strong>FÈS</strong></div>
-        <a href="#" class="btn-wa" id="wa-link">📱 ENVOYER SUR WHATSAPP</a>
+        <div class="inv-row"><span>Tél:</span><strong id="inv-tel"></strong></div>
+        <div class="inv-row"><span>Adresse:</span><strong id="inv-addr"></strong></div>
+        <hr>
+        <div class="inv-row"><span>Article:</span><strong>TV BOX 4/16 GB</strong></div>
+        <div class="inv-row"><span>Quantité:</span><strong id="inv-qty"></strong></div>
+        <div class="inv-row" style="font-size: 22px; color: var(--accent); border-top: 2px solid #eee; padding-top: 10px;">
+            <span>TOTAL:</span><strong id="inv-total"></strong>
+        </div>
+        <div class="payment-box">
+            <strong style="color: #856404;">💰 PAIEMENT VIA CASH PLUS :</strong><br>
+            Bénéficiaire: <strong>MORAD ZERROUAL</strong><br>
+            Ville: <strong>FÈS</strong>
+        </div>
+        <a href="#" class="btn-wa" id="wa-link">📱 ENVOYER AU WHATSAPP</a>
+        <button onclick="window.print()" class="btn-print">📥 Télécharger / Imprimer</button>
     </div>
 </div>
+
 <script>
-    function generateInvoice() {
+    async function generateInvoice() {
         const name = document.getElementById('custName').value;
         const phone = document.getElementById('custPhone').value;
         const address = document.getElementById('custAddress').value;
         const qty = document.getElementById('prodQty').value;
-        if(!name || !phone || !address) { alert("يرجى ملء جميع المعلومات !"); return; }
+        
+        if(!name || !phone || !address) { alert("Veuillez remplir les champs !"); return; }
+
         const total = qty * 300;
+        const date = new Date().toLocaleString('fr-FR');
+        const invNo = "MS-" + Math.floor(Math.random() * 8999 + 1000);
+
         document.getElementById('order-page').style.display = 'none';
         document.getElementById('invoice-section').style.display = 'block';
+
+        document.getElementById('inv-no').innerText = invNo;
+        document.getElementById('inv-date').innerText = date;
         document.getElementById('inv-client').innerText = name;
+        document.getElementById('inv-tel').innerText = phone;
+        document.getElementById('inv-addr').innerText = address;
+        document.getElementById('inv-qty').innerText = qty;
         document.getElementById('inv-total').innerText = total + " DH";
-        const text = `*NOUVELLE COMMANDE MORADSAT*%0A--------------------------%0A*Appareil:* Azasat Z1 8K%0A*Nom:* ${name}%0A*Tél:* ${phone}%0A*Adresse:* ${address}%0A*Total:* ${total} DH`;
-        document.getElementById('wa-link').href = `https://wa.me/212638485812?text=${text}`;
+
+        const whatsappNumber = "212638485812";
+        const text = `*COMMANDE MORADSAT*%0A--------------------------%0A*Facture:* ${invNo}%0A*Nom:* ${name}%0A*Tél:* ${phone}%0A*Adresse:* ${address}%0A*Quantité:* ${qty}%0A*Total:* ${total} DH%0A--------------------------%0A_Je vais envoyer le reçu Cash Plus._`;
+        document.getElementById('wa-link').href = `https://wa.me/${whatsappNumber}?text=${text}`;
     }
 </script>
 </body>
