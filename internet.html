@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moradsat - Internet par Satellite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #1a2a6c; --success: #27ae60; --danger: #e74c3c; --light: #f4f7f6; --admin-bg: #fffcf0; }
+        body { font-family: 'Poppins', sans-serif; background: var(--light); margin: 0; padding: 10px; color: #333; }
+        .container { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.15); }
+        .header { text-align: center; border-bottom: 4px solid var(--primary); padding-bottom: 20px; margin-bottom: 30px; }
+        .header h1 { color: var(--primary); margin: 0; font-size: 28px; text-transform: uppercase; letter-spacing: 1px; }
+        .header .phone-link { color: #27ae60; font-size: 20px; font-weight: bold; text-decoration: none; display: block; margin-top: 5px; }
+        .box { background: #fff; border: 1px solid #eee; padding: 25px; border-radius: 12px; margin-bottom: 25px; }
+        input, button, select { width: 100%; padding: 14px; margin: 10px 0; border-radius: 10px; border: 1px solid #ddd; font-size: 16px; box-sizing: border-box; }
+        button { background: var(--primary); color: white; border: none; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-wa { background: #25d366; }
+        .admin-trigger-btn { background: #444 !important; border-radius: 30px; width: auto !important; padding: 12px 40px !important; margin: 20px auto; display: block; }
+        .admin-section { display: none; background: var(--admin-bg); border: 2px dashed #f2a900; padding: 25px; border-radius: 15px; margin-top: 30px; }
+        .table-wrapper { overflow-x: auto; margin-top: 25px; }
+        table { width: 100%; border-collapse: collapse; background: white; font-size: 14px; min-width: 900px; }
+        th, td { border: 1px solid #eee; padding: 15px; text-align: center; }
+        th { background: var(--primary); color: white; }
+        .status-active { background: #dcfce7; color: var(--success); padding: 5px 10px; border-radius: 20px; font-weight: bold; }
+        .status-expired { background: #fee2e2; color: var(--danger); padding: 5px 10px; border-radius: 20px; font-weight: bold; }
+        #result-area { display:none; margin-top:20px; padding:25px; border-radius:12px; border:2px solid var(--primary); background:#fff; }
+        .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🛰️ INTERNET PAR SATELLITE - MORADSAT</h1>
+        <a href="tel:+212638485812" class="phone-link">📞 +212 638-485812</a>
+        <p>Service de Gestion des Abonnements Clients</p>
+    </div>
+    <div class="box">
+        <h3>🔍 ESPACE CLIENT</h3>
+        <input type="text" id="search-mac" placeholder="Ex: AA:BB:CC:11:22:33">
+        <button onclick="checkStatus()">VÉRIFIER MON STATUT</button>
+        <div id="result-area"></div>
+    </div>
+    <button id="admin-btn" class="admin-trigger-btn" onclick="unlockAdmin()">🔒 ACCÈS ADMINISTRATEUR</button>
+    <div id="admin-panel" class="admin-section">
+        <h2 style="color: #f2a900; text-align: center;">⚙️ Tableau de Bord</h2>
+        <div class="box">
+            <h4>➕ Activer un Client</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+                <input type="text" id="adm-name" placeholder="Nom">
+                <input type="text" id="adm-phone" placeholder="WhatsApp">
+                <input type="text" id="adm-mac" placeholder="MAC">
+                <input type="text" id="adm-secret" placeholder="Note">
+                <select id="adm-price"><option value="210 DH">210 DH</option><option value="260 DH">260 DH</option><option value="320 DH">320 DH</option></select>
+            </div>
+            <button class="btn-wa" onclick="addNew()">✅ ACTIVER</button>
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Client</th><th>Tel</th><th>MAC</th><th>Note</th><th>Début</th><th>Fin</th><th>Statut</th><th>Action</th></tr></thead>
+                <tbody id="table-body"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    const SECRET_CODE = "morad2026";
+    let db = JSON.parse(localStorage.getItem('moradsat_db')) || [];
+    function unlockAdmin() { if (prompt("Code:") === SECRET_CODE) { document.getElementById('admin-panel').style.display = 'block'; renderTable(); } }
+    function addNew() {
+        const n=document.getElementById('adm-name').value, p=document.getElementById('adm-phone').value, m=document.getElementById('adm-mac').value.toUpperCase(), s=document.getElementById('adm-secret').value, pr=document.getElementById('adm-price').value;
+        const d1=new Date().toISOString().split('T')[0], d2=new Date(new Date().setDate(new Date().getDate()+30)).toISOString().split('T')[0];
+        db.push({name:n, phone:p, mac:m, secret:s, price:pr, start:d1, end:d2});
+        localStorage.setItem('moradsat_db', JSON.stringify(db)); renderTable();
+    }
+    function checkStatus() {
+        const sm=document.getElementById('search-mac').value.toUpperCase(), res=document.getElementById('result-area'), u=db.find(x=>x.mac===sm);
+        res.style.display='block';
+        if(u) {
+            const exp = new Date().toISOString().split('T')[0] > u.end;
+            res.innerHTML = `<div class="info-row"><span>👤 Client:</span> <b>${u.name}</b></div><div class="info-row"><span>📞 Tel:</span> <b>${u.phone}</b></div><div class="info-row"><span>📅 Début:</span> <b>${u.start}</b></div><div class="info-row"><span>⌛ Fin:</span> <b style="color:red">${u.end}</b></div><div class="info-row"><span>📊 Statut:</span> <span class="${exp?'status-expired':'status-active'}">${exp?'EXPIRE':'ACTIF'}</span></div>`;
+        } else { res.innerHTML='MAC Introuvable'; }
+    }
+    function renderTable() {
+        const b=document.getElementById('table-body'); b.innerHTML='';
+        db.forEach((u,i)=>{ b.innerHTML+=`<tr><td>${u.name}</td><td>${u.phone}</td><td>${u.mac}</td><td>${u.secret}</td><td>${u.start}</td><td>${u.end}</td><td>-</td><td><button onclick="db.splice(${i},1);localStorage.setItem('moradsat_db',JSON.stringify(db));renderTable()">X</button></td></tr>`; });
+    }
+</script>
+</body>
+</html>
