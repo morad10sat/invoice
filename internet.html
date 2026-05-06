@@ -1,48 +1,96 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Moradsat - Gestion Internet</title>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
-
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; direction: rtl; text-align: center; background-color: #f4f4f4; padding: 20px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h1 { color: #1a2a6c; }
-        input, button { width: 90%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; }
-        button { background-color: #1a2a6c; color: white; cursor: pointer; border: none; font-weight: bold; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-        th { background-color: #1a2a6c; color: white; }
+        :root { --primary: #1a2a6c; --secondary: #21ba45; --cashplus-green: #00684d; --cashplus-yellow: #edaf11; }
+        body { font-family: Arial, sans-serif; background: #f4f7f6; margin: 0; padding: 10px; direction: ltr; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 15px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .header-box { text-align: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
+        .header-box h1 { font-size: 28px; color: var(--primary); margin: 0; }
+        .service-title { color: var(--secondary); font-weight: bold; font-size: 18px; }
+        .btn { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-success { background: var(--secondary); color: white; }
+        .btn-danger { background: #d9534f; color: white; border: none; padding: 5px 8px; border-radius: 4px; }
+        .res-card { background: #fff; border: 3px solid var(--secondary); padding: 12px; border-radius: 10px; text-align: left; margin-top: 10px; line-height: 1.6; }
+        #adminArea, #factureArea, #passwordArea { display: none; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: var(--primary); color: white; }
+        .invoice-box { border: 2px solid #000; padding: 15px; background: #fff; margin-top: 15px; }
+        .invoice-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--cashplus-green); padding-bottom: 10px; }
+        .cashplus-footer { margin-top: 15px; border: 2px solid var(--cashplus-yellow); padding: 10px; border-radius: 8px; display: flex; align-items: center; background: #fffdf5; }
+        @media print { .no-print { display: none !important; } #factureArea { display: block !important; } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Moradsat Internet</h1>
-    <div id="admin-section">
-        <input type="text" id="clientName" placeholder="إسم الزبون">
-        <input type="date" id="expiryDate">
-        <button onclick="addClient()">إضافة زبون</button>
+    <div class="header-box no-print">
+        <h1>🛰️ MORADSAT</h1>
+        <span class="service-title">INTERNET PAR SATELLITE</span>
+        <p>Fès, Maroc | 📞 0638-485812</p>
     </div>
-    <hr>
-    <table>
-        <thead>
-            <tr>
-                <th>الزبون</th>
-                <th>تاريخ الانتهاء</th>
-            </tr>
-        </thead>
-        <tbody id="clientsTable"></tbody>
-    </table>
+
+    <div class="no-print" style="text-align: center; background: #f9f9f9; padding: 15px; border-radius: 12px;">
+        <h3 style="margin-top:0;">🔍 SUIVI CLIENT (MAC)</h3>
+        <input type="text" id="checkInput" placeholder="Adresse MAC" style="width:90%; padding:10px; text-align:center; border:1px solid #ddd; border-radius:8px;">
+        <button class="btn btn-primary" onclick="checkStatus()">RECHERCHER</button>
+        <div id="resultArea"></div>
+    </div>
+
+    <div class="no-print" style="text-align: center; margin: 20px 0;">
+        <button id="loginBtn" class="btn" style="background:#444; color:white; width:auto; padding:8px 20px;" onclick="document.getElementById('passwordArea').style.display='block'; this.style.display='none'">🔐 ADMIN</button>
+        <div id="passwordArea">
+            <input type="password" id="adminPass" placeholder="Code" style="width:120px; padding:8px;">
+            <button class="btn btn-primary" style="width:auto; padding:8px 15px;" onclick="verifyAdmin()">OK</button>
+        </div>
+    </div>
+
+    <div id="adminArea" class="no-print">
+        <div style="background:#eef2ff; padding:15px; border-radius:10px;">
+            <h3 style="margin-top:0; text-align:center;">Nouveau Client</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <input type="text" id="newName" placeholder="Nom">
+                <input type="tel" id="newPhone" placeholder="WhatsApp">
+                <input type="text" id="newVirtual" placeholder="N° Contrat (Admin Only)">
+                <input type="text" id="newMac" placeholder="Adresse MAC">
+                <select id="newPrice"><option value="210 DH">210 DH</option><option value="260 DH">260 DH</option><option value="320 DH">320 DH</option></select>
+            </div>
+            <button class="btn btn-success" onclick="processClient()">✅ SAUVEGARDER & FACTURE</button>
+        </div>
+        <table id="clientsTable">
+            <thead><tr><th>Nom</th><th>MAC</th><th>Contrat</th><th>WhatsApp</th><th>Fin</th><th>Action</th></tr></thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+    <div id="factureArea">
+        <div class="invoice-box">
+            <div class="invoice-header">
+                <div><h2 style="color:var(--cashplus-green); margin:0;">MORADSAT</h2><small>SATELLITE INTERNET</small></div>
+                <div style="text-align:right; font-size:12px;">Responsable: MORADSAT<br>📞 0638-485812</div>
+            </div>
+            <div id="factureContent" style="padding: 15px 0; font-size: 15px; line-height:1.8;"></div>
+            <div class="cashplus-footer">
+                <div style="font-weight:bold; color:var(--cashplus-green); border-right:2px solid var(--cashplus-yellow); padding-right:10px; margin-right:10px;">CASH PLUS</div>
+                <div style="font-size:11px;">TPE: 35553R2778 | NOM: MORADSAT</div>
+            </div>
+            <div style="margin-top:15px; display:flex; justify-content:space-between; font-size:10px;"><p>Date: <span id="currentDate"></span></p><p>Cachet et Signature</p></div>
+        </div>
+        <button class="btn btn-success no-print" onclick="window.print()">🖨️ IMPRIMER</button>
+        <button class="btn no-print" style="background:#666; color:white;" onclick="location.reload()">RETOUR</button>
+    </div>
 </div>
 
 <script>
-    // هاد الجزء هو اللي فيه معلومات Firebase ديالك
     const firebaseConfig = {
-        apiKey: "AIzaSyAqnOGOVPEAJ0kx-yxjAbua...", 
+        apiKey: "AIzaSyAqnOGOVPEAJ0kx-yxjAbua",
         authDomain: "moradsat-db.firebaseapp.com",
         databaseURL: "https://moradsat-db-default-rtdb.firebaseio.com",
         projectId: "moradsat-db",
@@ -50,28 +98,64 @@
         messagingSenderId: "621440703659",
         appId: "1:621440703659:web:9f5e9b7843d883091b6bee"
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    function addClient() {
-        const name = document.getElementById('clientName').value;
-        const date = document.getElementById('expiryDate').value;
-        if(name && date) {
-            db.ref('clients').push({ name: name, date: date });
-            alert("تمت الإضافة بنجاح");
-        }
+    function verifyAdmin() {
+        if(document.getElementById('adminPass').value === "moradsat2026") {
+            document.getElementById('passwordArea').style.display = 'none';
+            document.getElementById('adminArea').style.display = 'block';
+            loadTableData();
+        } else { alert("Code Error"); }
     }
 
-    db.ref('clients').on('value', (snapshot) => {
-        const table = document.getElementById('clientsTable');
-        table.innerHTML = "";
-        snapshot.forEach((child) => {
-            let row = `<tr><td>${child.val().name}</td><td>${child.val().date}</td></tr>`;
-            table.innerHTML += row;
+    function processClient() {
+        const mac = document.getElementById('newMac').value.trim();
+        const name = document.getElementById('newName').value.trim();
+        const phone = document.getElementById('newPhone').value.trim();
+        if(!mac || !name) return alert("Nom/MAC requis");
+        const now = new Date(); const exp = new Date(); exp.setDate(now.getDate() + 30);
+        const data = {
+            name: name, phone: phone, virtual: document.getElementById('newVirtual').value,
+            mac: mac, price: document.getElementById('newPrice').value,
+            start: now.toLocaleDateString('fr-FR'), expiry: exp.toLocaleDateString('fr-FR'), expiryRaw: exp.getTime()
+        };
+        db.ref('clients').push(data).then(() => {
+            document.getElementById('adminArea').style.display = 'none';
+            document.getElementById('factureArea').style.display = 'block';
+            document.getElementById('currentDate').innerText = data.start;
+            document.getElementById('factureContent').innerHTML = `<b>Abonné:</b> ${data.name}<br><b>MAC:</b> ${data.mac}<br><b>Période:</b> Du ${data.start} Au ${data.expiry}<br><b>TOTAL: ${data.price}</b>`;
+            if(phone) window.open(`https://wa.me/${phone}?text=${encodeURIComponent('Bonjour '+data.name+', abonnement MORADSAT (MAC: '+data.mac+') du '+data.start+' au '+data.expiry)}`, '_blank');
         });
-    });
-</script>
+    }
 
+    function loadTableData() {
+        db.ref('clients').on('value', (snap) => {
+            const body = document.getElementById('tableBody'); body.innerHTML = "";
+            snap.forEach((child) => {
+                const d = child.val();
+                body.innerHTML += `<tr><td>${d.name}</td><td>${d.mac}</td><td>${d.virtual || '-'}</td><td>${d.phone || '-'}</td><td>${d.expiry}</td><td><button class="btn-danger" onclick="deleteClient('${child.key}')">🗑️</button></td></tr>`;
+            });
+        });
+    }
+
+    function deleteClient(id) { if(confirm("Supprimer?")) db.ref('clients/' + id).remove(); }
+
+    function checkStatus() {
+        const input = document.getElementById('checkInput').value.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+        db.ref('clients').once('value', (snap) => {
+            let found = false;
+            snap.forEach((child) => {
+                const d = child.val();
+                if(d.mac.toLowerCase().replace(/[^a-z0-9]/g, "") === input) {
+                    const isExp = new Date().getTime() > d.expiryRaw;
+                    document.getElementById('resultArea').innerHTML = `<div class="res-card"><b>👤 Abonné:</b> ${d.name}<br><b>📞 Tél:</b> ${d.phone || '---'}<br><b>📅 Début:</b> ${d.start}<br><b>📅 Fin:</b> ${d.expiry}<br><b>📡 Statut:</b> ${isExp ? '❌ EXPIRÉ' : '✅ ACTIF'}</div>`;
+                    found = true;
+                }
+            });
+            if(!found) document.getElementById('resultArea').innerHTML = "<p style='color:red;'>Introuvable</p>";
+        });
+    }
+</script>
 </body>
 </html>
