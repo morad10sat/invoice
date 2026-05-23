@@ -26,7 +26,7 @@
         .invoice-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--cashplus-green); padding-bottom: 10px; }
         .cashplus-footer { margin-top: 15px; border: 2px solid var(--cashplus-yellow); padding: 10px; border-radius: 8px; display: flex; align-items: center; background: #fffdf5; }
         
-        /* تصميم مخصص ومقاد للخانات باش ميبقاش التداخل */
+        /* تصميم متناسق ومقاد 100% للشاشات */
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
         .form-grid input, .form-grid select { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
         
@@ -65,7 +65,11 @@
                 <input type="tel" id="newPhone" placeholder="WhatsApp">
                 <input type="text" id="newVirtual" placeholder="N° Contrat (Admin Only)">
                 <input type="text" id="newMac" placeholder="Adresse MAC">
-                <select id="newPrice"><option value="210 DH">210 DH</option><option value="260 DH">260 DH</option><option value="320 DH">320 DH</option></select>
+                <select id="newPrice">
+                    <option value="210 DH">210 DH</option>
+                    <option value="260 DH">260 DH</option>
+                    <option value="320 DH">320 DH</option>
+                </select>
             </div>
             <button class="btn btn-success" onclick="processClient()">✅ SAUVEGARDER & FACTURE</button>
         </div>
@@ -115,22 +119,38 @@
     }
 
     function processClient() {
-        const mac = document.getElementById('newMac').value.trim();
         const name = document.getElementById('newName').value.trim();
         const phone = document.getElementById('newPhone').value.trim();
-        if(!mac || !name) return alert("Nom/MAC requis");
+        const virtual = document.getElementById('newVirtual').value.trim();
+        const mac = document.getElementById('newMac').value.trim();
+        const price = document.getElementById('newPrice').value;
+
+        // التحقق فقط من الإسم، وإذا كانت الخانات الأخرى خاوية كيعوضها بـ "-" بلا ما يبلوكي الحفظ
+        if(!name) return alert("Nom requis");
+
         const now = new Date(); const exp = new Date(); exp.setDate(now.getDate() + 30);
+        
         const data = {
-            name: name, phone: phone, virtual: document.getElementById('newVirtual').value,
-            mac: mac, price: document.getElementById('newPrice').value,
-            start: now.toLocaleDateString('fr-FR'), expiry: exp.toLocaleDateString('fr-FR'), expiryRaw: exp.getTime()
+            name: name, 
+            phone: phone || '-', 
+            virtual: virtual || '-',
+            mac: mac || '-', 
+            price: price,
+            start: now.toLocaleDateString('fr-FR'), 
+            expiry: exp.toLocaleDateString('fr-FR'), 
+            expiryRaw: exp.getTime()
         };
+
         db.ref('clients').push(data).then(() => {
             document.getElementById('adminArea').style.display = 'none';
             document.getElementById('factureArea').style.display = 'block';
             document.getElementById('currentDate').innerText = data.start;
             document.getElementById('factureContent').innerHTML = `<b>Abonné:</b> ${data.name}<br><b>MAC:</b> ${data.mac}<br><b>Période:</b> Du ${data.start} Au ${data.expiry}<br><b>TOTAL: ${data.price}</b>`;
-            if(phone) window.open(`https://wa.me/${phone}?text=${encodeURIComponent('Bonjour '+data.name+', abonnement MORADSAT (MAC: '+data.mac+') du '+data.start+' au '+data.expiry)}`, '_blank');
+            if(phone && phone !== '-') {
+                window.open(`https://wa.me/${phone}?text=${encodeURIComponent('Bonjour '+data.name+', abonnement MORADSAT (MAC: '+data.mac+') du '+data.start+' au '+data.expiry)}`, '_blank');
+            }
+        }).catch((error) => {
+            alert("Erreur de sauvegarde: " + error.message);
         });
     }
 
@@ -148,11 +168,13 @@
 
     function checkStatus() {
         const input = document.getElementById('checkInput').value.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+        if(!input) return alert("Veuillez saisir une adresse MAC");
+        
         db.ref('clients').once('value', (snap) => {
             let found = false;
             snap.forEach((child) => {
                 const d = child.val();
-                if(d.mac && d.mac.toLowerCase().replace(/[^a-z0-9]/g, "") === input) {
+                if(d.mac && d.mac !== '-' && d.mac.toLowerCase().replace(/[^a-z0-9]/g, "") === input) {
                     const isExp = new Date().getTime() > d.expiryRaw;
                     document.getElementById('resultArea').innerHTML = `<div class="res-card"><b>👤 Abonné:</b> ${d.name}<br><b>📞 Tél:</b> ${d.phone || '---'}<br><b>📅 Début:</b> ${d.start}<br><b>📅 Fin:</b> ${d.expiry}<br><b>📡 Statut:</b> ${isExp ? '❌ EXPIRÉ' : '✅ ACTIF'}</div>`;
                     found = true;
